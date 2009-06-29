@@ -18,6 +18,8 @@
 	
 	load('search');
 	
+	$smarty_output = "view.tpl"; //Set the output tpl file for smarty.
+	
 	if(!isset($_GET['id'])){
 		if(function_exists("redirect")){
 			redirect("./");
@@ -115,7 +117,7 @@
 	//die(var_dump($tags));
 	$smarty->assign('tags', $tags);
 	$smarty->assign('queries', $db->queries);	
-	$smarty->display('view.tpl');
+	//$smarty->display('view.tpl');
 	
 
 	

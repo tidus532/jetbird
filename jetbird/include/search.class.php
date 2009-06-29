@@ -36,6 +36,7 @@
 		}
 				
 		function find_in_cache($keywords) {
+			global $config;
 			global $db;
 			foreach ($keywords as $word) {
 				$words .= $word;
@@ -54,7 +55,7 @@
 				}
 				$time_now = time();
 				$timediff = $time_now - $time_cache;
-				if($timediff > 3600) {
+				if($timediff > $config['search']['cache_time']) {
 					return false;
 				}
 				else

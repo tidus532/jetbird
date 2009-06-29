@@ -20,7 +20,6 @@
 	ob_start();
 	session_start();
 	// Make sure all the data we recieve is UTF-8, 
-	// from now on there is only one charset in the world for me: UTF-8
 	header('Content-Type: text/html; charset=utf-8');
 	
 	require_once "include/bootstrap.php";
@@ -33,8 +32,9 @@
 	load("database_connect");
 	load("smarty_glue");
 	load("login_bootstrap");
+	load("plugin");
 	$smarty = new smarty_glue;
-	
+	$plugin = new plugin;
 	// Getting ready for the real deal: including our pages
 	$arguments = array_keys($_GET);
 	$action = addslashes($arguments[1]);
@@ -47,10 +47,12 @@
 	$load = exec('uptime');
 	$load = split('load averages: ', $load);
 	$smarty->assign("server_load", $load[1]);
-	
+	//die(var_dump($arguments));
 	if(isset($arguments)){
 		if(file_exists("page/". $arguments[0] .".php") && is_readable("page/". $arguments[0] .".php")){
 			require_once "page/". strtolower($arguments[0]) .".php";
+			$plugin->load_plugins($arguments[0]);
+			$smarty->display($smarty_output);
 		}elseif(empty($arguments[0]) || !empty($_GET[$arguments[0]])){		// if arguments for specific page like ./?page=1
 			require_once "page/main.php";
 		}elseif(file_exists($smarty->template_dir ."/static/". $arguments[0] .".tpl") &&
